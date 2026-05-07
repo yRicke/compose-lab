@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <title>ComposeTest</title>
+</head>
+<body>
+    <div>
+        <h2 class="title">Adicionar Tarefas</h2>
+        <form action="{% url 'adicionar' %}" method="POST">
+            {% csrf_token %}
+            <input type="text" name="titulo" id="">
+            <button type="submit">Adicionar</button>
+        </form>
+    </div>
+    <div>
+        <h2 class="title">Ver Tarefas</h2>
+        <ul>
+        {% for tarefa in tarefas %}
+            <li class="task-item">
+                <div class="task-content">
+                    <p>{{ tarefa.titulo }}</p>
+                </div>
+                <div class="task-actions">
+                    <form action="{% url 'excluir' tarefa.id %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="excluir">Excluir</button>
+                    </form>
+                    <form action="{% url 'editar' tarefa.id %}" method="POST">
+                        {% csrf_token %}
+                        <label for="concluida-{{ tarefa.id }}">
+                            <input type="checkbox" name="concluida" id="concluida-{{ tarefa.id }}" {% if tarefa.concluida %}checked{% endif %}>
+                            Concluída
+                        </label>
+                        <button type="submit">Editar</button>
+                    </form>
+                </div>
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
